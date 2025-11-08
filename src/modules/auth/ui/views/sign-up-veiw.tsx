@@ -17,8 +17,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 
 const formSchema = z.object({
@@ -57,10 +59,34 @@ export const SignUpView = () => {
         name: data.name,
         email: data.email,
         password: data.password,
+        callbackURL: "/"
        },
     {
         onSuccess: () => {
+            setPending(false)
             router.push("/")
+        },
+        onError: ({error}) => {
+            setError(error.message)
+        }
+
+    }
+    )
+    setPending(false)
+}
+
+const onSocial =  (provider : "github" | "google") => {
+
+       setError(null)
+       setPending(true)
+
+       authClient.signIn.social({
+        provider: provider,
+        callbackURL: "/"
+       },
+    {
+        onSuccess: () => {
+            setPending(false)
         },
         onError: ({error}) => {
             setError(error.message)
@@ -180,8 +206,8 @@ export const SignUpView = () => {
                             </span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <Button disabled={pending} variant="outline">Google</Button>
-                            <Button disabled={pending} variant="outline">GitHub</Button>
+                            <Button type="button" disabled={pending} variant="outline" onClick={()=> onSocial("google")}><FcGoogle /></Button>
+                            <Button type="button" disabled={pending} variant="outline" onClick={() => onSocial("github")}><FaGithub /></Button>
                         </div>
                         <div className="text-center text-sm">
                             Do you have an account?{" "}
