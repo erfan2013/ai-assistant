@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-
+import LoadingSpinner from "@/components/shared/loading-spinner";
 
 export const HomeView = () => {
     const router = useRouter();
@@ -19,7 +19,7 @@ export const HomeView = () => {
 
   if(!session){
     return (
-      <p>loading...</p>
+      <LoadingSpinner  />
     )
   }
   return (
