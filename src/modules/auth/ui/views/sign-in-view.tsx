@@ -21,8 +21,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-
-
+import { Eye, EyeOff } from "lucide-react";
 const formSchema = z.object({
     email: z.email({ message: "Invalid email address" }),
     password: z.string().min(1,{ message: "Password is required" }),
@@ -32,6 +31,8 @@ export const SignInView = () => {
     const router = useRouter()
     const [error, setError] = useState<string | null>(null)
     const [pending, setPending] = useState(false)
+        const [showPassword, setShowPassword] = useState(false)
+    
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -131,11 +132,24 @@ const onSocial =  (provider : "github" | "google") => {
                                     <FormItem>
                                         <FormLabel>Password</FormLabel>
                                         <FormControl>
+                                            <div className="relative">
                                             <Input
-                                                type="password"
+                                                type={showPassword ? "text" : "password"}
                                                 placeholder="***********"
                                                 {...field}
                                             />
+                                             <button
+            type="button"
+            className="absolute inset-y-0 right-3 flex items-center text-muted-foreground"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </button>
+                                            </div>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -171,7 +185,7 @@ const onSocial =  (provider : "github" | "google") => {
                 </form>
                 </Form>
 
-                <div className="bg-radial from-green-700 to-green-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+                <div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
                     <img src="/logo.svg" alt="Logo" className="h-[92px] w-[92px]" />
                     <p className="text-2xl font-semibold text-white">
                         Ai Assistant
