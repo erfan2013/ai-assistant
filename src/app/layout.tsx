@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Sora, JetBrains_Mono } from "next/font/google";
+import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
 
 const soraSans = Sora({
@@ -28,6 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <TRPCReactProvider>
     <html lang="en">
       <body
         className={`${soraSans.variable} ${jetMono.variable} antialiased font-sans`}
@@ -35,5 +37,6 @@ export default function RootLayout({
         {children}
       </body>
     </html>
+    </TRPCReactProvider>
   );
 }
